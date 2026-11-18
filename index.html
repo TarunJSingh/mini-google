@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Google · a tiny search engine</title>
+  <meta name="description" content="A six-page search engine that compares old keyword ranking with PageRank.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="top">
+    <a href="#" class="brand"><span class="dot"></span>Mini Google</a>
+    <nav>
+      <a href="#search">Search</a>
+      <a href="#graph">Link graph</a>
+      <a href="#how">How it works</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== SEARCH ===== -->
+    <section class="hero" id="search">
+      <h1>Mini <span>Google</span></h1>
+      <p class="tagline">Six web pages. Two ways to rank them. Spot the difference.</p>
+
+      <form id="form" class="searchbar" autocomplete="off">
+        <input id="q" type="search" placeholder="Try: pizza" value="pizza" aria-label="Search query">
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="chips" aria-label="Example searches">
+        <button type="button" data-q="pizza">pizza</button>
+        <button type="button" data-q="food">food</button>
+        <button type="button" data-q="pune">pune</button>
+        <button type="button" data-q="canteen chai">canteen chai</button>
+        <button type="button" data-q="dosa">dosa</button>
+      </div>
+    </section>
+
+    <!-- ===== RESULTS: side by side ===== -->
+    <section class="results">
+      <div class="col">
+        <div class="col-head old">
+          <h2>The old way</h2>
+          <p>Rank by how many times your words appear on the page.</p>
+        </div>
+        <ol id="old" class="list"></ol>
+      </div>
+      <div class="col">
+        <div class="col-head pr">
+          <h2>PageRank</h2>
+          <p>Rank matching pages by how important other pages say they are.</p>
+        </div>
+        <ol id="pr" class="list"></ol>
+      </div>
+    </section>
+    <p id="verdict" class="verdict"></p>
+
+    <!-- ===== LINK GRAPH ===== -->
+    <section class="panel" id="graph">
+      <h2>The link graph</h2>
+      <p class="sub">Each arrow is a link. A page gets more PageRank when important pages link to it. Circle size = PageRank.</p>
+      <div class="graph-wrap">
+        <svg id="svg" viewBox="0 0 720 420" role="img" aria-label="Diagram of links between the six pages"></svg>
+      </div>
+      <table class="table">
+        <thead><tr><th>#</th><th>Page</th><th>Links to</th><th>Linked from</th><th>PageRank</th></tr></thead>
+        <tbody id="tbl"></tbody>
+      </table>
+    </section>
+
+    <!-- ===== HOW IT WORKS ===== -->
+    <section class="panel" id="how">
+      <h2>How it works</h2>
+      <div class="how">
+        <div class="card">
+          <span class="tag old-tag">Old way</span>
+          <h3>Count the keywords</h3>
+          <p>Split each page into words, count how many times the search words appear, and show the highest count first.</p>
+          <p class="warn">The problem: anyone can cheat. Page 6 just repeats “pizza” ten times, so it wins every pizza search even though it is useless.</p>
+        </div>
+        <div class="card">
+          <span class="tag pr-tag">PageRank</span>
+          <h3>Count the votes</h3>
+          <p>A link is a vote. Every page starts with an equal share (1/6). On each round, a page passes its score along its outgoing links, split equally.</p>
+          <p class="formula">PR(A) = (1 − d) / N + d × Σ PR(B) / L(B)</p>
+          <p>d = 0.85 (damping), N = 6 pages, L(B) = number of links on page B. We repeat until the scores stop changing (<span id="iters">–</span> rounds).</p>
+          <p class="good">Page 6 has <strong>no</strong> pages linking to it, so it keeps only the minimum score and drops to the bottom.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>Mini Google · a student project built with HTML, CSS and JavaScript · not affiliated with Google</span>
+    <span>Data: 6 sample pages from class</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
